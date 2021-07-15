@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <PackageId>SDC_Sharp.DiscordNet</PackageId>
+        <Title>SDC_Sharp.DiscordNet</Title>
+        <Authors>Satan1c</Authors>
+        <Description>sdc.su API wrapper for C# .NET Core 3.1</Description>
+        <Copyright>Copyright (c) Alexander 2021</Copyright>
+        <PackageProjectUrl>https://github.com/Satan1c/sdc_cs</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Satan1c/sdc_cs</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>SDC</PackageTags>
+        <AssemblyName>SDC_Sharp.DiscordNet</AssemblyName>
+        <PackageVersion>1.0.0</PackageVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Discord.Net" Version="2.4.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SDC_Sharp.csproj" />
+    </ItemGroup>
+
+</Project>
