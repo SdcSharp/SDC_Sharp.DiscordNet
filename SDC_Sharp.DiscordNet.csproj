@@ -12,7 +12,7 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>SDC</PackageTags>
         <AssemblyName>SDC_Sharp.DiscordNet</AssemblyName>
-        <PackageVersion>2.0.0</PackageVersion>
+        <PackageVersion>2.0.1</PackageVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
