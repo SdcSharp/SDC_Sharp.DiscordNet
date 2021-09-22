@@ -5,14 +5,15 @@
         <PackageId>SDC_Sharp.DiscordNet</PackageId>
         <Title>SDC_Sharp.DiscordNet</Title>
         <Authors>Satan1c</Authors>
-        <Description>sdc.su API wrapper for C# .NET Core 3.1</Description>
+        <Description>Addon for SDC_Sharp to work with DSharpPlus</Description>
         <Copyright>Copyright (c) Alexander 2021</Copyright>
-        <PackageProjectUrl>https://github.com/Satan1c/sdc_cs</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/Satan1c/sdc_cs</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/SdcSharp/SDC_Sharp.DiscordNet</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/SdcSharp/SDC_Sharp.DiscordNet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>SDC</PackageTags>
         <AssemblyName>SDC_Sharp.DiscordNet</AssemblyName>
-        <PackageVersion>1.0.0</PackageVersion>
+        <PackageVersion>2.0.0</PackageVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>

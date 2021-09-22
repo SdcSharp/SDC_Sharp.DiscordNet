@@ -2,22 +2,23 @@
 using Discord.WebSocket;
 using SDC_Sharp.DiscordNet.Types;
 
-namespace SDC_Sharp
+namespace SDC_Sharp.DiscordNet
 {
-    public class DiscordClientWrapper : DiscordClientWrapperBase
+    public class DiscordClientWrapper : IDiscordClientWrapper
     {
-        private readonly DiscordSocketClient _client;
+        internal readonly DiscordSocketClient _client;
 
         public DiscordClientWrapper(DiscordSocketClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
-            SdcSharpExtensions.Discord = _client;
         }
 
-        public override ulong CurrentUserId => _client.CurrentUser.Id;
+        BaseSocketClient IDiscordClientWrapper.Client => _client;
 
-        public override int ServersCount => _client.Guilds.Count;
+        public ulong CurrentUserId => _client.CurrentUser.Id;
 
-        public override int ShardCount => 1;
+        public int ServersCount => _client.Guilds.Count;
+
+        public int ShardCount => 1;
     }
 }

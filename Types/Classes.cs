@@ -1,38 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
-using static SDC_Sharp.SdcSharpExtensions;
+using SDC_Sharp.SDC_Sharp;
 
 namespace SDC_Sharp.DiscordNet.Types
 {
-    public class BotsResponse
-    {
-        public bool status { get; set; }
-        public BotResponseError error { get; set; }
-
-        public override string ToString()
-        {
-            return
-                $"{GetType()}: " + (error == null
-                    ? "{ " +
-                      $"status: {(!status ? "null" : true.ToString())}, " +
-                      " }"
-                    : error.ToString());
-        }
-    }
-
     public class BotResponseError
     {
-        public string msg { get; set; }
-        public string type { get; set; }
-        public int code { get; set; }
+        public string Msg { get; set; }
+        public string Type { get; set; }
+        public int Code { get; set; }
 
         public Embed ToEmbed()
         {
             var embed = new EmbedBuilder();
-            embed.AddField("Type: ", $"`{type}`", true);
-            embed.AddField("Code: ", $"`{code}`", true);
-            embed.AddField("Message: ", $"`{msg}`", true);
+            embed.AddField("Type: ", $"`{Type}`", true);
+            embed.AddField("Code: ", $"`{Code}`", true);
+            embed.AddField("Message: ", $"`{Msg}`", true);
 
             return embed.Build();
         }
@@ -41,29 +28,47 @@ namespace SDC_Sharp.DiscordNet.Types
         {
             return $"{GetType()}: " +
                    "{ " +
-                   $"Type: {type}, " +
-                   $"Code: {code.ToString()}, " +
-                   $"Message: {msg}" +
+                   $"Type: {Type}, " +
+                   $"Code: {Code.ToString()}, " +
+                   $"Message: {Msg}" +
                    " }";
         }
     }
-
-    public class BlacklistResponse
+    
+    public struct BotsResponse
     {
-        public BotResponseError error { get; set; }
-        public ulong id { get; set; }
-        public string type { get; set; }
-        public sbyte warns { get; set; }
+        public bool Status { get; set; }
+        public BotResponseError Error { get; set; }
 
         public override string ToString()
         {
-            return $"{GetType()}: " + (error == null
+            return
+                $"{GetType()}: " + (Error == null
+                    ? "{ " +
+                      $"status: {(!Status ? "null" : Status.ToString())}, " +
+                      " }"
+                    : Error.ToString());
+        }
+    }
+
+    public struct BlacklistResponse
+    {
+        internal SdcSharpClient SdcClient;
+        
+        public BotResponseError Error { get; set; }
+        public ulong Id { get; set; }
+        public string Type { get; set; }
+        public sbyte Warns { get; set; }
+
+        public override string ToString()
+        {
+            return $"{GetType()}: " + (Error == null
                 ? "{ " +
-                  $"id: {id.ToString()}, " +
-                  $"type: {type}, " +
-                  $"warns: {warns.ToString()}" +
+                  $"id: {Id.ToString()}, " +
+                  $"type: {Type}, " +
+                  $"warns: {Warns.ToString()}" +
                   " }"
-                : error.ToString());
+                : Error.ToString());
         }
 
         public async Task<Embed> ToEmbed()
@@ -72,125 +77,205 @@ namespace SDC_Sharp.DiscordNet.Types
             embed.Title = "Варны";
             embed.Description = "\n";
 
-            if (id != 0)
+            if (Id != 0)
                 try
                 {
                     await SdcClient.RateLimiter();
                     embed.Title += " пользователя";
-                    embed.Description += $"{await SdcClient.Wrapper.GetUser(id)}\n";
+                    embed.Description += $"{await SdcClient.Wrapper.GetUser(Id)}\n";
                 }
                 catch
                 {
                 }
 
-            embed.Description += warns;
+            embed.Description += Warns;
 
             return embed.Build();
         }
     }
 
-    public class UserRatedServers
+    public struct UserRatedServers
     {
-        public BotResponseError error { get; set; }
+        public BotResponseError Error { get; set; }
         public UserRate[] RatedServersList { get; set; }
+        
+        public override string ToString()
+        {
+            return $"{GetType()}: " +
+                   (Error == null
+                       ? "{ " +
+                         (RatedServersList != null && RatedServersList.Length != 0
+                             ? (RatedServersList.Length > 1
+                                 ? $"[{string.Join(", ", RatedServersList.Select(x => x.ToString()))}]"
+                                 : $"[{RatedServersList.First()}]")
+                             : "[]") +
+                         " }"
+                       : Error.ToString());
+        }
     }
 
-    public class UserRate
+    public struct UserRate
     {
-        public ulong id { get; set; }
-        public byte rate { get; set; }
+        public ulong Id { get; set; }
+        public byte Rate { get; set; }
 
-        public SocketUser user { get; set; }
-        public SocketGuild guild { get; set; }
+        public SocketUser User { get; set; }
+        public SocketGuild Guild { get; set; }
+
+        public override string ToString()
+        {
+            return $"\"{Id}\": {Rate}";
+        }
     }
 
-    public class GuildPlace
+    public struct GuildPlace
     {
-        public BotResponseError error { get; set; }
+        public BotResponseError Error { get; set; }
 
-        public ulong id { get; set; }
-        public uint place { get; set; }
+        public ulong Id { get; set; }
+        public uint Place { get; set; }
+        
+        public override string ToString()
+        {
+            return $"{GetType()}: " +
+                   (Error == null
+                       ? "{ " +
+                         $"place: {Place}" +
+                         " }"
+                       : Error.ToString());
+        }
     }
 
-    public class GuildRatedUsers
+    public struct GuildRatedUsers
     {
-        public BotResponseError error { get; set; }
+        public BotResponseError Error { get; set; }
         public UserRate[] RatedUsersList { get; set; }
+        
+        public override string ToString()
+        {
+            return $"{GetType()}: " +
+                   (Error == null
+                       ? "{ " +
+                         (RatedUsersList != null && RatedUsersList.Length != 0
+                             ? (RatedUsersList.Length > 1
+                                 ? $"[{string.Join(", ", RatedUsersList.Select(x => x.ToString()))}]"
+                                 : $"[{RatedUsersList.First()}]")
+                             : "[]") +
+                         " }"
+                       : Error.ToString());
+        }
     }
 
-    public class GuildInfo
+    public struct GuildInfo
     {
-        public BotResponseError error { get; set; }
+        public BotResponseError Error { get; set; }
 
-        public string avatar { get; set; }
-        public string lang { get; set; }
-        public string name { get; set; }
-        public string des { get; set; }
-        public string invite { get; set; }
-        public string owner { get; set; }
-        public string tags { get; set; }
+        public string Avatar { get; set; }
+        public string Lang { get; set; }
+        public string Name { get; set; }
+        public string Des { get; set; }
+        public string Invite { get; set; }
+        public string Owner { get; set; }
+        public string Tags { get; set; }
 
-        public ulong id { get; set; }
-        public ulong upCount { get; set; }
+        public ulong Id { get; set; }
+        public ulong UpCount { get; set; }
 
-        public uint online { get; set; }
-        public uint members { get; set; }
+        public uint Online { get; set; }
+        public uint Members { get; set; }
 
-        public byte bot { get; set; }
+        public byte Bot { get; set; }
 
-        public BoostLevel boost { get; set; }
-        public BadgesEnum status { get; set; }
+        public BoostLevelEnum Boost { get; set; }
+        public BadgesEnum Status { get; set; }
 
-        public Embed ToEmbed()
+        private BadgesEnum[] _bages;
+        public BadgesEnum[] Bages
+        {
+            get
+            {
+                if (_bages == null || _bages.Length < 1)
+                    _bages = GetBadgesEnums(Status).GetAwaiter().GetResult();
+
+                return _bages;
+            }
+
+            set
+            {
+                if (value.Length >= 1)
+                    _bages = value;
+                else
+                    _bages = Array.Empty<BadgesEnum>();
+            }
+        }
+
+        private static Task<BadgesEnum[]> GetBadgesEnums(BadgesEnum bage)
+        {
+            var res = new LinkedList<BadgesEnum>();
+
+            return Task.Run(() =>
+            {
+                for (var i = 1; i <= 0x200; i *= 2)
+                {
+                    if (Enum.TryParse<BadgesEnum>(i.ToString(), out var status) && (bage & status) == status)
+                        res.AddLast(bage);
+                }
+                
+                return res.ToArray();
+            });
+        }
+
+        public EmbedBuilder ToEmbed()
         {
             var embed = new EmbedBuilder();
 
-            embed.Description = des;
+            embed.Description = Des;
             embed.Author = new EmbedAuthorBuilder
             {
-                Name = name,
-                Url = $"https://server-discord.com/{id}",
-                IconUrl = $"https://cdn.discordapp.com/icons/{id}/{avatar}.png"
+                Name = Name,
+                Url = $"https://server-discord.com/{Id}",
+                IconUrl = $"https://cdn.discordapp.com/icons/{Id}/{Avatar}.png"
             };
             embed.Footer = new EmbedFooterBuilder
             {
-                Text = owner
+                Text = Owner
             };
 
-            embed.AddField("Ап-очки: ", $"[`{upCount}`](https://server-discord.com/faq)");
-            embed.AddField("Уровень буста: ", $"[`BOOST {boost.ToString()}`](https://server-discord.com/boost)");
-            embed.AddField("Бейдж: ", $"[`{status.ToString()}`](https://server-discord.com/faq)");
+            embed.AddField("Ап-очки: ", $"[`{UpCount}`](https://server-discord.com/faq)");
+            embed.AddField("Уровень буста: ", $"[`BOOST {Boost.ToString()}`](https://server-discord.com/boost)");
+            embed.AddField("Бейдж: ", $"[`{(Bages.Length != 0 ? (Bages.Length > 1 ? string.Join(", ", Bages) : Bages.First().ToString()) : "нет")}`](https://server-discord.com/faq)");
             embed.AddField("Теги:",
-                tags.Length != 0 && tags.Split(",").Length >= 2 ? $"`{string.Join("`, `", tags.Split(","))}`" :
-                tags.Length != 0 ? $"`{tags}`" : "не указаны");
-            embed.AddField("Онлайн:", $"`{online}`", true);
-            return embed.Build();
+                Tags.Length != 0 && Tags.Split(",").Length >= 2 ? $"`{string.Join("`, `", Tags.Split(","))}`" :
+                Tags.Length != 0 ? $"`{Tags}`" : "не указаны");
+            embed.AddField("Онлайн:", $"`{Online}`", true);
+            return embed;
         }
 
         public override string ToString()
         {
-            return $"{GetType()}: " + (error == null
+            return $"{GetType()}: " + (Error == null
                 ? "{ " +
-                  $"avatar: \"{avatar}\", " +
-                  $"lang: \"{lang}\", " +
-                  $"name: \"{name}\", " +
-                  $"des: \"{des}\", " +
-                  $"invite: \"{invite}\", " +
-                  $"owner: \"{owner}\", " +
-                  $"tags: {tags}, " +
-                  $"id: {id.ToString()}, " +
-                  $"upCount: {upCount.ToString()}, " +
-                  $"online: {online.ToString()}, " +
-                  $"members: {members.ToString()}, " +
-                  $"bot: {bot.ToString()}, " +
-                  $"boost: {((int) boost).ToString()}, " +
-                  $"status: {((int) status).ToString()}, " +
+                  $"avatar: \"{Avatar}\", " +
+                  $"lang: \"{Lang}\", " +
+                  $"name: \"{Name}\", " +
+                  $"des: \"{Des}\", " +
+                  $"invite: \"{Invite}\", " +
+                  $"owner: \"{Owner}\", " +
+                  $"tags: {Tags}, " +
+                  $"id: {Id.ToString()}, " +
+                  $"upCount: {UpCount.ToString()}, " +
+                  $"online: {Online.ToString()}, " +
+                  $"members: {Members.ToString()}, " +
+                  $"bot: {Bot.ToString()}, " +
+                  $"boost: {((int) Boost).ToString()}, " +
+                  $"status: {((int) Status).ToString()}, " +
                   " }"
-                : error.ToString());
+                : Error.ToString());
         }
     }
-
-    public enum BoostLevel
+    
+    [Flags]
+    public enum BoostLevelEnum
     {
         none = 0,
         light = 1,
@@ -198,6 +283,7 @@ namespace SDC_Sharp.DiscordNet.Types
         max = 3
     }
 
+    [Flags]
     public enum BadgesEnum
     {
         sitedev = 0x1,
