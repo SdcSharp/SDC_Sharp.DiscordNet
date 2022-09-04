@@ -16,7 +16,7 @@ namespace SDC_Sharp.DiscordNet.Services
             m_clientConfig = sdcServices.Client;
         }
 
-        public void AutoPostStats(TimeSpan interval, bool logging = false)
+        public void AutoPostStats(TimeSpan interval, bool logging = false, CancellationToken cancellationToken = default)
         {
             AutoPostStats(
                 interval,
