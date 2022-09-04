@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using SDC_Sharp.DiscordNet.Types;
 using SDC_Sharp.Services;
@@ -8,29 +9,30 @@ namespace SDC_Sharp.DiscordNet.Services
 {
     public class BotsService : BaseBotsService
     {
-        private readonly IClientConfig _clientConfig;
+        private readonly IClientConfig m_clientConfig;
 
         public BotsService(SdcSharpClient client, SdcServices sdcServices) : base(client)
         {
-            _clientConfig = sdcServices.Client;
+            m_clientConfig = sdcServices.Client;
         }
 
         public void AutoPostStats(TimeSpan interval, bool logging = false)
         {
             AutoPostStats(
                 interval,
-                _clientConfig.Rest.CurrentUser.Id,
-                _clientConfig.ShardsCount,
-                _clientConfig.GuildsCount,
-                logging);
+                m_clientConfig.Rest.CurrentUser.Id,
+                m_clientConfig.ShardsCount,
+                m_clientConfig.GuildsCount,
+                logging,
+                cancellationToken);
         }
 
         public async Task<StatsResponse> PostStats()
         {
             return await PostStats<StatsResponse>(
-                _clientConfig.Rest.CurrentUser.Id,
-                _clientConfig.ShardsCount,
-                _clientConfig.GuildsCount);
+                m_clientConfig.Rest.CurrentUser.Id,
+                m_clientConfig.ShardsCount,
+                m_clientConfig.GuildsCount);
         }
     }
 }

@@ -10,11 +10,11 @@ namespace SDC_Sharp.DiscordNet.Services
 {
     public class MonitoringService : BaseMonitoringService
     {
-        private readonly IClientConfig _clientConfig;
+        private readonly IClientConfig m_clientConfig;
 
         public MonitoringService(SdcSharpClient client, SdcServices sdcServices) : base(client)
         {
-            _clientConfig = sdcServices.Client;
+            m_clientConfig = sdcServices.Client;
         }
 
         public async Task<ulong> GetGuildPlace(ulong guildId)
@@ -29,7 +29,7 @@ namespace SDC_Sharp.DiscordNet.Services
             guild.Avatar = "https://cdn.discordapp.com/icons/" + guildId + "/" + guild.Avatar + ".png";
             guild.Url = "https://server-discord.com/" + guildId;
             if (fetch)
-                guild.Instance = await _clientConfig.Rest.GetGuildAsync(guildId);
+                guild.Instance = await m_clientConfig.Rest.GetGuildAsync(guildId);
 
             return guild;
         }
@@ -42,7 +42,7 @@ namespace SDC_Sharp.DiscordNet.Services
 
             foreach (var (k, v) in rates)
             {
-                user = fetch ? new User(k, await _clientConfig.Rest.GetUserAsync(k)) : new User(k);
+                user = fetch ? new User(k, await m_clientConfig.Rest.GetUserAsync(k)) : new User(k);
                 result[user] = v;
             }
 
@@ -56,7 +56,7 @@ namespace SDC_Sharp.DiscordNet.Services
             if (fetch)
             {
                 foreach (var (k, v) in rates)
-                    result[new RatedGuild(k, await _clientConfig.Rest.GetGuildAsync(k))] = v;
+                    result[new RatedGuild(k, await m_clientConfig.Rest.GetGuildAsync(k))] = v;
 
                 return result;
             }
