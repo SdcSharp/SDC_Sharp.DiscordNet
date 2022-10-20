@@ -1,4 +1,4 @@
-using System;
+using Discord;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using SDC_Sharp.DiscordNet.Services;

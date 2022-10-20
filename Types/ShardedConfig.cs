@@ -1,4 +1,5 @@
 using System.Linq;
+using Discord;
 using Discord.WebSocket;
 
 namespace SDC_Sharp.DiscordNet.Types
