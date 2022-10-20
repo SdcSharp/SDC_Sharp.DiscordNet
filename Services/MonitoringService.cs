@@ -8,63 +8,63 @@ using Rates = System.Collections.Generic.Dictionary<ulong, SDC_Sharp.Types.Enums
 
 namespace SDC_Sharp.DiscordNet.Services
 {
-    public class MonitoringService : BaseMonitoringService
-    {
-        private readonly IClientConfig m_clientConfig;
+	public class MonitoringService : BaseMonitoringService
+	{
+		private readonly IClientConfig m_clientConfig;
 
-        public MonitoringService(SdcSharpClient client, SdcServices sdcServices) : base(client)
-        {
-            m_clientConfig = sdcServices.Client;
-        }
+		public MonitoringService(SdcSharpClient client, SdcServices sdcServices) : base(client)
+		{
+			m_clientConfig = sdcServices.Client;
+		}
 
-        public async Task<ulong> GetGuildPlace(ulong guildId)
-        {
-            return (await GetGuildPlace<GuildPlace>(guildId)).Place;
-        }
+		public async Task<ulong> GetGuildPlace(ulong guildId)
+		{
+			return (await GetGuildPlace<GuildPlace>(guildId)).Place;
+		}
 
-        public async Task<Guild> GetGuild(ulong guildId, bool fetch = false)
-        {
-            var guild = await GetGuild<Guild>(guildId);
-            guild.Id = guildId;
-            guild.Avatar = "https://cdn.discordapp.com/icons/" + guildId + "/" + guild.Avatar + ".png";
-            guild.Url = "https://server-discord.com/" + guildId;
-            if (fetch)
-                guild.Instance = await m_clientConfig.Rest.GetGuildAsync(guildId);
+		public async Task<Guild> GetGuild(ulong guildId, bool fetch = false)
+		{
+			var guild = await GetGuild<Guild>(guildId);
+			guild.Id = guildId;
+			guild.Avatar = "https://cdn.discordapp.com/icons/" + guildId + "/" + guild.Avatar + ".png";
+			guild.Url = "https://server-discord.com/" + guildId;
+			if (fetch)
+				guild.Instance = await m_clientConfig.Rest.GetGuildAsync(guildId);
 
-            return guild;
-        }
+			return guild;
+		}
 
-        public async Task<Dictionary<User, Rate>> GetGuildRates(ulong guildId, bool fetch = false)
-        {
-            User user;
-            var result = new Dictionary<User, Rate>();
-            var rates = await GetGuildRates<Rates>(guildId);
+		public async Task<Dictionary<User, Rate>> GetGuildRates(ulong guildId, bool fetch = false)
+		{
+			User user;
+			var result = new Dictionary<User, Rate>();
+			var rates = await GetGuildRates<Rates>(guildId);
 
-            foreach (var (k, v) in rates)
-            {
-                user = fetch ? new User(k, await m_clientConfig.Rest.GetUserAsync(k)) : new User(k);
-                result[user] = v;
-            }
+			foreach (var (k, v) in rates)
+			{
+				user = fetch ? new User(k, await m_clientConfig.Rest.GetUserAsync(k)) : new User(k);
+				result[user] = v;
+			}
 
-            return result;
-        }
+			return result;
+		}
 
-        public async Task<Dictionary<RatedGuild, Rate>> GetUserRates(ulong userId, bool fetch = false)
-        {
-            var result = new Dictionary<RatedGuild, Rate>();
-            var rates = await GetUserRates<Rates>(userId);
-            if (fetch)
-            {
-                foreach (var (k, v) in rates)
-                    result[new RatedGuild(k, await m_clientConfig.Rest.GetGuildAsync(k))] = v;
+		public async Task<Dictionary<RatedGuild, Rate>> GetUserRates(ulong userId, bool fetch = false)
+		{
+			var result = new Dictionary<RatedGuild, Rate>();
+			var rates = await GetUserRates<Rates>(userId);
+			if (fetch)
+			{
+				foreach (var (k, v) in rates)
+					result[new RatedGuild(k, await m_clientConfig.Rest.GetGuildAsync(k))] = v;
 
-                return result;
-            }
+				return result;
+			}
 
-            foreach (var (k, v) in rates)
-                result[new RatedGuild(k)] = v;
+			foreach (var (k, v) in rates)
+				result[new RatedGuild(k)] = v;
 
-            return result;
-        }
-    }
+			return result;
+		}
+	}
 }

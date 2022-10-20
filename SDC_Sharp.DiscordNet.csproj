@@ -17,11 +17,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Discord.Net" Version="3.8.0" />
+        <PackageReference Include="Discord.Net" Version="3.8.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SDC_Sharp\SDC_Sharp.csproj" />
+        <ProjectReference Include="..\SDC_Sharp\SDC_Sharp.csproj"/>
     </ItemGroup>
 
 </Project>
