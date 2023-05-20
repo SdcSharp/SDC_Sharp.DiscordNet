@@ -11,7 +11,7 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>sdc discord</PackageTags>
         <AssemblyName>SDC_Sharp.DiscordNet</AssemblyName>
-        <PackageVersion>2.2.0</PackageVersion>
+        <PackageVersion>3.2.0</PackageVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <LangVersion>10</LangVersion>
         <TargetFrameworks>net7.0;net6.0;net6.0-windows;net7.0-windows</TargetFrameworks>
