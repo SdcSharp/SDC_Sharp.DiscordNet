@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
         <PackageId>SDC_Sharp.DiscordNet</PackageId>
         <Title>SDC_Sharp.DiscordNet</Title>
         <Authors>Satan1c</Authors>
@@ -12,16 +11,18 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>sdc discord</PackageTags>
         <AssemblyName>SDC_Sharp.DiscordNet</AssemblyName>
-        <PackageVersion>3.1.1</PackageVersion>
+        <PackageVersion>2.2.0</PackageVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <LangVersion>10</LangVersion>
+        <TargetFrameworks>net7.0;net6.0;net6.0-windows;net7.0-windows</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Discord.Net" Version="3.8.0"/>
+        <PackageReference Include="Discord.Net" Version="3.10.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SDC_Sharp\SDC_Sharp.csproj"/>
+        <ProjectReference Include="..\SDC_Sharp\SDC_Sharp.csproj" />
     </ItemGroup>
 
 </Project>
