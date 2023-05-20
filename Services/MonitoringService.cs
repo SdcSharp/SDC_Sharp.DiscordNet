@@ -25,14 +25,14 @@ public sealed class MonitoringService : BaseMonitoringService
 		return (await GetGuildPlace<GuildPlace>(guildId)).Place;
 	}
 
-		public async Task<Guild> GetGuild(ulong guildId, bool fetch = false)
-		{
-			var guild = await GetGuild<Guild>(guildId);
-			guild.Id = guildId;
-			guild.Avatar = "https://cdn.discordapp.com/icons/" + guildId + "/" + guild.Avatar + ".png";
-			guild.Url = "https://server-discord.com/" + guildId;
-			if (fetch)
-				guild.Instance = await m_clientConfig.Rest.GetGuildAsync(guildId);
+	public async Task<Guild> GetGuild(ulong guildId, bool fetch = false)
+	{
+		var guild = await GetGuild<Guild>(guildId);
+		guild.Id = guildId;
+		guild.Avatar = "https://cdn.discordapp.com/icons/" + guildId + "/" + guild.Avatar + ".png";
+		guild.Url = "https://server-discord.com/" + guildId;
+		if (fetch)
+			guild.Instance = await m_clientConfig.Rest.GetGuildAsync(guildId);
 
 		return guild;
 	}
@@ -46,21 +46,41 @@ public sealed class MonitoringService : BaseMonitoringService
 		{
 			foreach (var (k, v) in rates)
 			{
-				user = fetch ? new User(k, await m_clientConfig.Rest.GetUserAsync(k)) : new User(k);
+				IUser? instance = null;
+
+				try
+				{
+					instance = await m_clientConfig.Rest.GetUserAsync(k);
+				}
+				catch
+				{
+					// ignored
+				}
+
+				var user = new User(k, instance);
 				result[user] = v;
 			}
+
+			return result;
+		}
+
+		foreach (var (k, v) in rates)
+		{
+			var user = new User(k);
+			result[user] = v;
+		}
 
 		return result;
 	}
 
-		public async Task<Dictionary<RatedGuild, Rate>> GetUserRates(ulong userId, bool fetch = false)
+	public async Task<Dictionary<RatedGuild, Rate>> GetUserRates(ulong userId, bool fetch = false)
+	{
+		var result = new Dictionary<RatedGuild, Rate>();
+		var rates = await GetUserRates<Rates>(userId);
+		if (fetch)
 		{
-			var result = new Dictionary<RatedGuild, Rate>();
-			var rates = await GetUserRates<Rates>(userId);
-			if (fetch)
-			{
-				foreach (var (k, v) in rates)
-					result[new RatedGuild(k, await m_clientConfig.Rest.GetGuildAsync(k))] = v;
+			foreach (var (k, v) in rates)
+				result[new RatedGuild(k, await m_clientConfig.Rest.GetGuildAsync(k))] = v;
 
 			return result;
 		}
