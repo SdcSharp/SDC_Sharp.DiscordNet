@@ -1,20 +1,20 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using SDC_Sharp.DiscordNet.Types;
+using SDC_Sharp.DiscordNet.Interfaces;
 using SDC_Sharp.Services;
 using SDC_Sharp.Types.Bots;
 
-namespace SDC_Sharp.DiscordNet.Services
-{
-	public class BotsService : BaseBotsService
-	{
-		private readonly IClientConfig m_clientConfig;
+namespace SDC_Sharp.DiscordNet.Services;
 
-		public BotsService(SdcSharpClient client, SdcServices sdcServices) : base(client)
-		{
-			m_clientConfig = sdcServices.Client;
-		}
+public sealed class BotsService : BaseBotsService
+{
+	private readonly IClientConfig m_clientConfig;
+
+	public BotsService(ISdcSharpClient client, ISdcServices sdcServices) : base(client)
+	{
+		m_clientConfig = sdcServices.Client;
+	}
 
 		public void AutoPostStats(TimeSpan interval, bool logging = false,
 			CancellationToken cancellationToken = default)
