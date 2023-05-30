@@ -7,9 +7,9 @@ using SDC_Sharp.DiscordNet.Types;
 
 namespace SDC_Sharp.DiscordNet;
 
-public sealed class SdcServices
+public sealed class SdcServices : ISdcServices
 {
-	public readonly IClientConfig Client;
+	public IClientConfig Client { get; }
 
 	public SdcServices(IClientConfig config)
 	{

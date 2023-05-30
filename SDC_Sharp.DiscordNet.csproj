@@ -5,13 +5,12 @@
         <Title>SDC_Sharp.DiscordNet</Title>
         <Authors>Satan1c</Authors>
         <Description>Addon for SDC_Sharp to work with Discord.NET entities</Description>
-        <Copyright>Copyright (c) Alexander 2022</Copyright>
         <PackageProjectUrl>https://github.com/SdcSharp/SDC_Sharp.DiscordNet</PackageProjectUrl>
         <RepositoryUrl>https://github.com/SdcSharp/SDC_Sharp.DiscordNet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>sdc discord</PackageTags>
         <AssemblyName>SDC_Sharp.DiscordNet</AssemblyName>
-        <PackageVersion>3.2.0</PackageVersion>
+        <PackageVersion>3.2.1</PackageVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <LangVersion>10</LangVersion>
         <TargetFrameworks>net7.0;net6.0;net6.0-windows;net7.0-windows</TargetFrameworks>
